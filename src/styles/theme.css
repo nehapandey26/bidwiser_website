@@ -1,0 +1,180 @@
+/*
+ * ============================================================================
+ *  DESIGN TOKENS  —  single source of truth for the whole app
+ * ============================================================================
+ *  Tailwind v4 reads this @theme block and generates utilities:
+ *    --color-brand   -> bg-brand / text-brand / border-brand
+ *    --text-h2       -> text-h2  (line-height + weight pulled from companions)
+ *
+ *  Values marked ✓ are confirmed from the Figma Inspect panel.
+ *  Values marked ~ are still estimated (exact numbers not captured yet).
+ * ============================================================================
+ */
+
+@theme {
+  /* ---- Brand ------------------------------------------------------- ✓ */
+  --color-brand: #20429b;          /* ✓ logo, navbar CTA, italic emphasis */
+  --color-brand-ink: #183379;      /* ~ darker shade for hover */
+  --color-brand-accent: #20429b;   /* ✓ same blue used for emphasis text */
+  --color-accent: #e8481f;         /* ~ orange — step markers / active bullet */
+  --color-accent-red: #d5372a;     /* ~ "Patel" logo red */
+
+  /* ---- Neutrals (on light) --------------------------------------- */
+  /* token names must not collide with font-size names (avoid --color-body) */
+  --color-ink: #1e1e1e;            /* ✓ headings / near-black text / dark cert cards */
+  --color-night: #171717;          /* ✓ dark-section background */
+  --color-copy: #666666;           /* ✓ body copy on light (hero paragraph) */
+  --color-muted: #797979;          /* ✓ smaller / secondary text (DM Sans 500) */
+  /* pull-quote plain text is #727272 — applied inline in PullQuote to avoid
+     a name clash with the --text-quote font-size token */
+  --color-surface: #ffffff;        /* ✓ */
+  --color-surface-soft: #fafafa;
+  --color-grid: #e8e8e8;           /* ~ visible layout rule lines */
+  --color-border: #e6e7eb;
+
+  /* ---- Neutrals (on dark) -------------------------------------- */
+  --color-ink-soft: #212121;       /* raised panel on dark */
+  --color-on-ink: #f4f4f3;         /* headings / primary text on dark */
+  --color-on-ink-muted: #9a9a9a;   /* body text on dark */
+  --color-ink-grid: #3f3f40;       /* ✓ rule lines / card borders on dark */
+
+  /* ---- Match / status badges --------------------------------- */
+  --color-match-high: #0f9d6b;
+  --color-match-high-bg: #e6f5ee;
+  --color-match-mid: #c07d18;
+  --color-match-mid-bg: #f8efdc;
+  --color-match-low: #d6453f;
+  --color-match-low-bg: #f9e6e5;
+
+  /* ---- Mock-UI state chips ------------------------------------- */
+  /* ✓ = read directly off Figma Inspect ("border: 1px solid var(--state-X-light)",
+     "background: var(--state-X-lighter)"). Others follow the same light/lighter
+     recipe at matching saturation — not yet confirmed individually. */
+  --color-state-warning-border: #ffd9c0;   /* ✓ "Conflict Detection" */
+  --color-state-warning-bg: #fff3eb;       /* ✓ */
+  --color-state-away-border: #ffecc0;      /* ✓ "Company Context" */
+  --color-state-away-bg: #fffaeb;          /* ✓ */
+  --color-state-info-border: #c7d9ff;      /* ~ "Tender Trained" */
+  --color-state-info-bg: #eef3ff;          /* ~ */
+  --color-state-success-border: #bfe8d3;   /* ~ "Source Verified", "No Tender Context" */
+  --color-state-success-bg: #eafbf1;       /* ~ */
+  --color-state-error-border: #ffc9c9;     /* ~ "No Verification" */
+  --color-state-error-bg: #fff1f1;         /* ~ */
+  --color-state-neutral-border: #ebebeb;   /* ✓ window-card border ("No Corrigendum" chip) */
+  --color-state-neutral-bg: #ffffff;       /* ✓ */
+  --color-state-cyan-border: #9fdcf4;      /* ✓ "Eligibility criteria" chip (step 02) */
+  --color-state-cyan-bg: #e2f4fd;          /* ✓ */
+
+  /* ---- Typography ------------------------------------------- */
+  /* var(--font-*) injected by next/font in src/app/fonts.js */
+  --font-serif: var(--font-sentient), 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Sentient is used at weight 300 with -0.04em tracking across the design. */
+
+  --text-hero: clamp(2.5rem, 4.6vw, 4rem);      /* ✓ 64px, clamps exactly at ≥1140px viewports */
+  --text-hero--line-height: 1.09375;            /* ✓ 70 / 64 */
+  --text-hero--font-weight: 300;                /* ✓ */
+
+  --text-h1: clamp(2.2rem, 4.2vw, 3.25rem);     /* ~ */
+  --text-h1--line-height: 1.12;
+  --text-h1--font-weight: 300;
+
+  --text-h2: clamp(1.9rem, 3.4vw, 2.5rem);      /* ~ */
+  --text-h2--line-height: 1.16;
+  --text-h2--font-weight: 300;
+
+  --text-h3: clamp(1.4rem, 2.2vw, 1.75rem);     /* ~ */
+  --text-h3--line-height: 1.25;
+  --text-h3--font-weight: 300;
+
+  --text-quote: 3rem;                            /* ✓ 48px */
+  --text-quote--line-height: 1.292;             /* ✓ 62 / 48 */
+  --text-quote--font-weight: 300;               /* ✓ */
+
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.6;
+
+  --text-base: 1rem;
+  --text-base--line-height: 1.62;
+
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5;
+
+  --text-eyebrow: 0.72rem;
+  --text-eyebrow--line-height: 1;
+
+  /* ---- Radius ------------------------------------------- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 28px;
+  --radius-pill: 999px;
+
+  /* ---- Elevation ------------------------------------- */
+  --shadow-pill: 0 6px 18px -6px rgb(20 20 20 / 0.18);
+  --shadow-soft: 0 2px 12px -4px rgb(20 20 20 / 0.1);
+  --shadow-card: 0 30px 70px -24px rgb(20 20 20 / 0.28);
+  --shadow-chip: 0 1px 2px 0 rgb(10 13 20 / 0.03);   /* ✓ mock-UI chips + window cards */
+
+  /* ---- Layout --------------------------------------- */
+  --container-max: 1208px;         /* ✓ outer frame borders measured from Figma (~116px margins on 1440) */
+  --gutter: 32px;                  /* ✓ inner content sits ~33px inside the frame border */
+  --header-h: 76px;
+}
+
+/* ---------------------------------------------------------------------------
+ *  Custom utilities (Tailwind v4 @utility)
+ * ------------------------------------------------------------------------- */
+
+/* blue -> mauve -> peach -> orange brand gradient (hero band, story card).
+   In Figma this is built from large blurred circles; approximated here. */
+@utility brand-gradient {
+  background-color: #cf9a8c;
+  background-image:
+    radial-gradient(85% 120% at 2% 42%, #2f4fae 0%, rgb(47 79 174 / 0) 58%),
+    radial-gradient(85% 120% at 99% 60%, #f2a15f 0%, rgb(242 161 95 / 0) 60%),
+    linear-gradient(95deg, #5c78cf 0%, #c795a0 46%, #f2a15f 100%);
+}
+
+/* "How it works" step card — ✓ Figma: soft #FFF2EC ground with a warm glow
+   (steps 01 & 03) */
+@utility peach-gradient {
+  /* ✓ Figma step-01 frame: near-white on the left → warm orange at the right edge */
+  background-color: #fff5f0;
+  background-image:
+    radial-gradient(70% 110% at 100% 50%, #f6a67e 0%, rgb(246 166 126 / 0.55) 30%, rgb(246 166 126 / 0) 72%),
+    linear-gradient(90deg, #fff6f1 0%, #ffece2 100%);
+}
+
+/* "How it works" step card — ✓ Figma: cool lavender/blue ground (steps 02 & 04) */
+@utility sky-gradient {
+  /* ✓ Figma step-02/04 frames: same recipe in lavender-blue */
+  background-color: #f3f5fc;
+  background-image:
+    radial-gradient(70% 110% at 100% 50%, #aebcf0 0%, rgb(174 188 240 / 0.55) 30%, rgb(174 188 240 / 0) 72%),
+    linear-gradient(90deg, #f5f6fd 0%, #e9edfa 100%);
+}
+
+/* Diagonal hatch — thin lines at -45deg, section dividers */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-grid) 0,
+    var(--color-grid) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+}
+
+/* "Barcode" ruler strip at the top edge of dark sections */
+@utility ticker {
+  background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-on-ink) 12%, transparent) 0,
+    color-mix(in srgb, var(--color-on-ink) 12%, transparent) 1px,
+    transparent 1px,
+    transparent 13px
+  );
+}

@@ -1,0 +1,210 @@
+/* Tailwind v4 entry. Design tokens live in ./theme.css (@theme block). */
+@import 'tailwindcss';
+@import './theme.css';
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    /* offset anchor jumps so they clear the sticky header */
+    scroll-padding-top: calc(var(--header-h) + 16px);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--color-surface);
+    color: var(--color-copy);
+    font-size: var(--text-base);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    color: var(--color-ink);
+    font-weight: 300;
+    letter-spacing: -0.04em; /* ✓ Figma: -1.6px @ 40px, -1.92px @ 48px */
+  }
+
+  ::selection {
+    background-color: var(--color-brand);
+    color: #fff;
+  }
+
+  :where(a, button, input, textarea):focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+/* ── "How it works" scroll-driven step transitions ────────────────────── */
+@layer components {
+  /* the step content that slides/fades in when its step becomes active */
+  .step-enter {
+    animation: step-enter 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  /* the floating mock inside the card gets a slightly later, softer entrance */
+  .step-enter-mock {
+    animation: step-enter-mock 640ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+  }
+  /* decorative concentric rings drift outward on step change */
+  .step-rings {
+    animation: step-rings 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes step-enter {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes step-enter-mock {
+  from { opacity: 0; transform: translateY(26px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes step-rings {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── "Find it" scene: flowing beads, line-draw, typewriter rows ─────────── */
+@layer components {
+  /* a bead that travels down a connector line, looping forever */
+  /* iteration-count is set inline (BEAD_LOOPS) — `both` keeps it hidden before
+     its delay AND after the last loop, so no stray dot is left behind */
+  .bead {
+    animation: bead-down 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite both;
+  }
+  /* vertical / horizontal hairline "drawing" itself */
+  .draw-v { transform-origin: top; animation: draw-v 380ms ease-out both; }
+  .draw-h { transform-origin: center; animation: draw-h 380ms ease-out both; }
+  /* card / chip pop-in */
+  .pop-in { animation: pop-in 460ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  /* typewriter reveal (timing-function set inline as steps(n)) */
+  .type-in { display: inline-block; animation: type-in 520ms both; }
+  /* SVG path drawing itself (element must have pathLength="1" + stroke-dasharray="1") */
+  .draw-path { animation: draw-path 520ms ease-out both; }
+  /* icon badge "ticks" into place — overshoot bounce */
+  .icon-pop { animation: icon-pop 480ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+  /* gradient orb (GradientDot): blobs slowly orbit + breathe inside the disc */
+  .orb-spin { animation: orb-spin 7s linear infinite; }
+
+  /* product-showcase windows (ref: vizually) — each one rises out of a blur
+     and sharpens; the side cards first peek from BEHIND the main window, then
+     cross in front of it (z-index steps mid-animation) and settle. */
+  .scene-rise { animation: scene-rise 1100ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .scene-emerge-left { animation: scene-emerge-left 1300ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .scene-emerge-right { animation: scene-emerge-right 1300ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .float { animation: float 6s ease-in-out infinite; }
+
+  /* "downloading" — progress track fills left → right (width set via --progress) */
+  .dl-fill { animation: dl-fill var(--dl-dur, 1600ms) cubic-bezier(0.4, 0, 0.2, 1) both; }
+  /* download arrow nudges down repeatedly while a download is in flight */
+  .dl-bounce { animation: dl-bounce 900ms ease-in-out infinite; }
+}
+
+@keyframes orb-spin {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.12); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+@keyframes scene-rise {
+  from { opacity: 0; filter: blur(14px); transform: translateY(56px) scale(0.985); }
+  60%  { opacity: 1; }
+  to   { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
+}
+@keyframes scene-emerge-left {
+  0%   { opacity: 0; filter: blur(12px); transform: translate(70px, 48px) scale(0.96); z-index: 1; }
+  30%  { opacity: 1; filter: blur(6px); transform: translate(46px, 22px) scale(0.975); z-index: 1; }
+  31%  { z-index: 30; }
+  100% { opacity: 1; filter: blur(0); transform: translate(0, 0) scale(1); z-index: 30; }
+}
+@keyframes scene-emerge-right {
+  0%   { opacity: 0; filter: blur(12px); transform: translate(-70px, 40px) scale(0.96); z-index: 1; }
+  30%  { opacity: 1; filter: blur(6px); transform: translate(-44px, 18px) scale(0.975); z-index: 1; }
+  31%  { z-index: 30; }
+  100% { opacity: 1; filter: blur(0); transform: translate(0, 0) scale(1); z-index: 30; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes dl-fill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+@keyframes dl-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(2px); }
+}
+
+/* live "0 KB of 120 KB" counter — animates a registered custom property and
+   prints it via a CSS counter (no JS timers) */
+@property --kb { syntax: '<integer>'; initial-value: 0; inherits: false; }
+.dl-count {
+  counter-reset: kb var(--kb);
+  animation: dl-count var(--dl-dur, 1600ms) cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.dl-count::after { content: counter(kb) " KB of " attr(data-total) " KB"; }
+@keyframes dl-count { from { --kb: 0; } to { --kb: 120; } }
+
+@keyframes icon-pop {
+  0%   { opacity: 0; transform: scale(0.2) rotate(-20deg); }
+  60%  { opacity: 1; transform: scale(1.18) rotate(4deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes draw-path {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes bead-down {
+  0%   { transform: translateY(0); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateY(var(--bead-travel, 40px)); opacity: 0; }
+}
+@keyframes draw-v { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes draw-h { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes type-in {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+/* ── word-by-word text reveal (see components/ui/AnimatedText.jsx) ──────── */
+.word-in { animation: word-in 460ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes word-in {
+  from { opacity: 0; transform: translateY(0.75em); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── scroll-reveal (see components/ui/Reveal.jsx) ───────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .word-in { animation: none; }
+  .step-enter, .step-enter-mock, .step-rings,
+  .bead, .draw-v, .draw-h, .draw-path, .pop-in, .type-in, .icon-pop,
+  .orb-spin, .dl-fill, .dl-bounce, .dl-count,
+  .scene-rise, .scene-emerge-left, .scene-emerge-right, .float { animation: none; }
+  .dl-count { --kb: 120; }
+}
